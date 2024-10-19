@@ -11,5 +11,3 @@ export const getContactById = async (contactId) => {
 
   return contact;
 };
-
-// console.log(await getContactById('6712f1320a68126174bf8023'), 'id');
