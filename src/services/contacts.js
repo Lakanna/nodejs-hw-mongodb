@@ -11,3 +11,19 @@ export const getContactById = async (contactId) => {
 
   return contact;
 };
+
+export const createContact = async (payload) => {
+  const newContact = await ContactsCollection.create(payload);
+
+  return newContact;
+};
+
+export const updateContact = async (contactId, payload, options = {}) => {
+  const updatedContact = await ContactsCollection.findOneAndUpdate(
+    { _id: contactId },
+    payload,
+    { new: true, includeResultMetadata: true, ...options },
+  );
+  console.log(updateContact.value, 'upd contact');
+  return updatedContact;
+};
