@@ -1,6 +1,7 @@
 import createHttpError from 'http-errors';
 import {
   createContact,
+  deleteContact,
   getAllContacts,
   getContactById,
   updateContact,
@@ -18,7 +19,6 @@ export const getAllContactsController = async (req, res) => {
 
 export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
-  console.log(contactId, 'id');
 
   const contact = await getContactById(contactId);
 
@@ -49,15 +49,52 @@ export const createContactController = async (req, res) => {
   throw createHttpError(500, 'Incorrect body of request');
 };
 
-export const updateContactController = async (req, res) => {
+export const updateContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const body = req.body;
 
-  const updContact = updateContact(contactId, body);
+  const updContact = await updateContact(contactId, body);
+
+  if (updContact === null) {
+    next(createHttpError(404, `Contact whith id ${contactId} not found`));
+    return;
+  }
 
   res.status(200).json({
     status: 200,
     message: 'Successfully patched a contact!',
     data: updContact,
+  });
+};
+
+export const deleteContactController = async (req, res, next) => {
+  const { contactId } = req.params;
+
+  const deletedContact = await deleteContact(contactId);
+
+  if (!deletedContact) {
+    next(createHttpError(404, `Contact with id ${contactId} not found`));
+    return;
+  }
+
+  res.status(204).json({ status: 204 });
+};
+
+export const upsertContactController = async (req, res, next) => {
+  const { contactId } = req.params;
+  const body = req.body;
+
+  const upsertContact = await updateContact(contactId, body, { upsert: true });
+
+  if (!upsertContact) {
+    next(createHttpError(404, 'Not found'));
+    return;
+  }
+
+  const status = upsertContact.isNew ? 201 : 200;
+  res.status(status).json({
+    status: status,
+    message: '`Successfully upserted a contact!`',
+    data: upsertContact.contact,
   });
 };
