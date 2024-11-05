@@ -37,15 +37,14 @@ export const loginUser = async (payload) => {
 
   await SessionCollection.deleteOne({ userId: user._id });
 
-  const accessToken = randomBytes(30).toString('base64');
-  const refreshToken = randomBytes(30).toString('base64');
+  const newSession = createSession();
+
+  // const accessToken = randomBytes(30).toString('base64');
+  // const refreshToken = randomBytes(30).toString('base64');
 
   return await SessionCollection.create({
     userId: user._id,
-    accessToken,
-    refreshToken,
-    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
-    refreshTokenValidUntil: new Date(Date.now() + ONE_MOUNTH),
+    ...newSession,
   });
 };
 

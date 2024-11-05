@@ -10,12 +10,18 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 
+/**
+  |============================
+  | get all contacts controller
+  |============================
+*/
 export const getAllContactsController = async (req, res) => {
   console.log(req.query, 'req query in controller');
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortOrder, sortBy } = parseSortParams(req.query);
   const filter = parseFilterParams(req.query);
   console.log(filter, 'filter ai controller');
+  const userId = req.user._id;
 
   // console.log(page, 'page', perPage, 'perPage in controller');
 
@@ -25,6 +31,7 @@ export const getAllContactsController = async (req, res) => {
     sortOrder,
     sortBy,
     filter,
+    userId,
   });
 
   res.status(200).json({
@@ -34,10 +41,16 @@ export const getAllContactsController = async (req, res) => {
   });
 };
 
+/**
+  |============================
+  | get contact by id controller
+  |============================
+*/
 export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
+  const userId = req.user._id;
 
-  const contact = await getContactById(contactId);
+  const contact = await getContactById({ userId, contactId });
 
   if (!contact) {
     throw createHttpError(404, `Contact whit id ${contactId} not found`);
@@ -50,10 +63,17 @@ export const getContactByIdController = async (req, res) => {
   });
 };
 
+/**
+  |============================
+  | create contact controller
+  |============================
+*/
 export const createContactController = async (req, res) => {
   const body = req.body;
+  const userId = req.user._id;
+  console.log(userId, 'userId in controller');
 
-  const newContact = await createContact(body);
+  const newContact = await createContact({ userId, body });
 
   res.status(201).json({
     status: 201,
@@ -62,6 +82,11 @@ export const createContactController = async (req, res) => {
   });
 };
 
+/**
+  |============================
+  | update contact by id controller
+  |============================
+*/
 export const updateContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const body = req.body;

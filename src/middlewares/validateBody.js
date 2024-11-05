@@ -2,7 +2,10 @@ import createHttpError from 'http-errors';
 
 export const validateBody = (schema) => async (req, res, next) => {
   try {
-    await schema.validateAsync(req.body, { abortEarly: false });
+    const userId = req.user._id.toString();
+
+    const body = { ...req.body, userId };
+    await schema.validateAsync(body, { abortEarly: false });
     next();
   } catch (err) {
     console.log(err, 'err in validate body', req.body, 'req.body');

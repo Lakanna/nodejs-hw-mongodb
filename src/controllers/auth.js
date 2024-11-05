@@ -6,6 +6,11 @@ import {
   registerUser,
 } from '../services/auth.js';
 
+/**
+  |============================
+  | register User controller
+  |============================
+*/
 export const registerController = async (req, res) => {
   const payload = req.body;
 
@@ -16,20 +21,25 @@ export const registerController = async (req, res) => {
     .json({ status: 201, message: 'User successfully registred', data: user });
 };
 
+/**
+  |============================
+  | login User controller
+  |============================
+*/
 export const loginUserController = async (req, res) => {
   const session = await loginUser(req.body);
 
-  res.cookie('refreshToken', session.refreshToken, {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_MOUNTH),
-  });
+  // res.cookie('refreshToken', session.refreshToken, {
+  //   httpOnly: true,
+  //   expires: new Date(Date.now() + ONE_MOUNTH),
+  // });
 
-  res.cookie('sessionId', session._id, {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_MOUNTH),
-  });
+  // res.cookie('sessionId', session._id, {
+  //   httpOnly: true,
+  //   expires: new Date(Date.now() + ONE_MOUNTH),
+  // });
 
-  // setupSession(res, session);
+  setupSession(res, session);
 
   res.status(200).json({
     status: 200,

@@ -1,18 +1,25 @@
+import createHttpError from 'http-errors';
 import { SORT_ORDER } from '../constants/index.js';
 import { ContactsCollection } from '../db/models/contacts.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
+/**
+  |============================
+  | get all contacts for user
+  |============================
+*/
 export const getAllContacts = async ({
   page = 1,
   perPage = 10,
   sortOrder = SORT_ORDER.ASC,
   sortBy = '_id',
   filter = {},
+  userId,
 }) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
-  const contactsQuery = ContactsCollection.find();
+  const contactsQuery = ContactsCollection.find({ userId });
 
   if (filter.type) {
     contactsQuery.where('contactType').equals(filter.type);
@@ -46,23 +53,39 @@ export const getAllContacts = async ({
   return { data: contacts, ...paginationData };
 };
 
-export const getContactById = async (contactId) => {
-  const contact = await ContactsCollection.findById(contactId);
+/**
+  |============================
+  | get contact by Id
+  |============================
+*/
+export const getContactById = async ({ userId, contactId }) => {
+  const contact = await ContactsCollection.findOne({ contactId, userId });
 
   return contact;
 };
 
-export const createContact = async (payload) => {
-  const newContact = await ContactsCollection.create(payload);
+/**
+  |============================
+  | create contact by user
+  |============================
+*/
+export const createContact = async ({ userId, body }) => {
+  console.log(userId, 'userid in service');
+  const newContact = await ContactsCollection.create({ userId, ...body });
 
   return newContact;
 };
 
+/**
+  |============================
+  | update contact by user
+  |============================
+*/
 export const updateContact = async (contactId, payload, options = {}) => {
   const updatedContact = await ContactsCollection.findOneAndUpdate(
     { _id: contactId },
     payload,
-    { new: true, includeResultMetadata: true, ...options },
+    { includeResultMetadata: true, ...options },
   );
 
   if (!updatedContact || !updatedContact.value) return null;
