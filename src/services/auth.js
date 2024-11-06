@@ -39,9 +39,6 @@ export const loginUser = async (payload) => {
 
   const newSession = createSession();
 
-  // const accessToken = randomBytes(30).toString('base64');
-  // const refreshToken = randomBytes(30).toString('base64');
-
   return await SessionCollection.create({
     userId: user._id,
     ...newSession,
@@ -84,8 +81,6 @@ export const refreshUserSession = async ({ sessionId, refreshToken }) => {
     _id: sessionId,
     refreshToken,
   });
-
-  console.log(session, 'session in refresh service');
 
   if (!session) {
     throw createHttpError(401, 'Session not found');

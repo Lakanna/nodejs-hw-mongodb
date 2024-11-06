@@ -20,8 +20,6 @@ export const authenticate = async (req, res, next) => {
 
   const session = await SessionCollection.findOne({ accessToken: token });
 
-  console.log(session, 'session in authenticate');
-
   if (!session) {
     next(createHttpError(401, 'Session not found'));
     return;
@@ -45,3 +43,12 @@ export const authenticate = async (req, res, next) => {
 
   next();
 };
+
+// {
+//   _id: new ObjectId('672a72175e1e4202eb68cc37'),
+//   name: 'Jon test',
+//   email: 'jhon@ukr.net',
+//   password: '$2b$10$0Hq6iZoMDVWoPSUbT0khROJwGIr4jsUB5ZtXxGsqOEZLh/b25Ox3i',
+//   createdAt: 2024-11-05T19:29:27.589Z,
+//   updatedAt: 2024-11-05T19:29:27.589Z
+// } user in authenticate

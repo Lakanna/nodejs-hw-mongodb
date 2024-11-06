@@ -44,7 +44,7 @@ contactsRouter.patch(
   '/:contactId',
   isValidId,
   validateBody(updateContactSchema),
-  ctrlWrapper(updateContactController),
+  ctrlWrapper(upsertContactController),
 );
 
 contactsRouter.delete(
@@ -57,7 +57,7 @@ contactsRouter.put(
   '/:contactId',
   isValidId,
   validateBody(createContactsSchema),
-  ctrlWrapper(upsertContactController),
+  ctrlWrapper(updateContactController),
 );
 
 export default contactsRouter;
