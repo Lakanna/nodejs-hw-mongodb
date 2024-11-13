@@ -152,7 +152,7 @@ export const requestResetToken = async (email) => {
     link: `${env('APP_DOMAIN')}/reset-password?token=${resetToken}}`,
   });
 
-  await sendEmail({
+  return await sendEmail({
     from: env(SMTP.SMTP_FROM),
     to: email,
     subject: 'Reset your password',
@@ -171,7 +171,8 @@ export const resetPassword = async (payload) => {
   try {
     entries = jwt.verify(payload.token, env('JWT_SECRET'));
   } catch (error) {
-    if (error instanceof Error) throw createHttpError(401, error.message);
+    if (error instanceof Error)
+      throw createHttpError(401, 'Token is expired or invalid.');
     throw error;
   }
 
@@ -191,4 +192,6 @@ export const resetPassword = async (payload) => {
     { password: encryptedPassword },
     { new: true },
   );
+
+  await SessionCollection.findOneAndDelete({ userId: user._id });
 };

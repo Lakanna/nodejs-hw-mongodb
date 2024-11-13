@@ -1,3 +1,4 @@
+import createHttpError from 'http-errors';
 import { ONE_MOUNTH } from '../constants/index.js';
 import {
   loginUser,
@@ -106,7 +107,14 @@ export const refreshUserSessionController = async (req, res) => {
 */
 
 export const sendResetEmailController = async (req, res) => {
-  await requestResetToken(req.body.email);
+  const result = await requestResetToken(req.body.email);
+
+  if (result.rejected.length > 0) {
+    throw createHttpError(
+      500,
+      'Failed to send the email, please try again later.',
+    );
+  }
 
   res.status(200).json({
     status: 200,
