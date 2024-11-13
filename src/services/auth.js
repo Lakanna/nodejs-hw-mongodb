@@ -160,6 +160,11 @@ export const requestResetToken = async (email) => {
   });
 };
 
+/**
+  |============================
+  | reset password
+  |============================
+*/
 export const resetPassword = async (payload) => {
   let entries;
 
@@ -170,7 +175,7 @@ export const resetPassword = async (payload) => {
     throw error;
   }
 
-  const user = UsersCollection.findOne({
+  const user = await UsersCollection.findOne({
     email: entries.email,
     _id: entries.sub,
   });
@@ -184,5 +189,6 @@ export const resetPassword = async (payload) => {
       _id: user._id,
     },
     { password: encryptedPassword },
+    { new: true },
   );
 };
