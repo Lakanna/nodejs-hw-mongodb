@@ -58,6 +58,7 @@ export const getContactById = async ({ userId, contactId }) => {
   | create contact by user
   |============================
 */
+
 export const createContact = async ({ userId, body }) => {
   const newContact = await ContactsCollection.create({ userId, ...body });
 
@@ -69,6 +70,7 @@ export const createContact = async ({ userId, body }) => {
   | update contact by user
   |============================
 */
+
 export const updateContact = async ({ _id, body, options, userId }) => {
   const updatedContact = await ContactsCollection.findOneAndUpdate(
     { _id, userId },

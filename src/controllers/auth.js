@@ -108,6 +108,7 @@ export const refreshUserSessionController = async (req, res) => {
 
 export const sendResetEmailController = async (req, res) => {
   const result = await requestResetToken(req.body.email);
+  console.log(req.body.email, 'req.body.email');
 
   if (result.rejected.length > 0) {
     throw createHttpError(

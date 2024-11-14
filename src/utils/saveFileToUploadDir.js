@@ -10,7 +10,5 @@ export const saveFileToUploadDir = async (file) => {
     path.join(UPLOAD_DIR, file.filename),
   );
 
-  console.log(file, 'file in save file to uploads dir');
-
   return `${env('APP_DOMAIN')}/uploads/${file.filename}`;
 };

@@ -18,14 +18,14 @@ import {
 
 import { isValidId } from '../middlewares/isValidId.js';
 import { authenticate } from '../middlewares/authenticate.js';
-import { authorization } from '../middlewares/authorization.js';
+// import { authorization } from '../middlewares/authorization.js';
 import { upload } from '../middlewares/multer.js';
 
 const contactsRouter = Router();
 
 contactsRouter.use(authenticate);
 
-contactsRouter.use(authorization);
+// contactsRouter.use(authorization);
 
 contactsRouter.get('/', ctrlWrapper(getAllContactsController));
 
