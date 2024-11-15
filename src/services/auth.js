@@ -149,7 +149,7 @@ export const requestResetToken = async (email) => {
 
   const html = template({
     name: user.name,
-    link: `${env('APP_DOMAIN')}/reset-pwd?token=${resetToken}`,
+    link: `${env('APP_DOMAIN')}/reset-password?token=${resetToken}`,
   });
 
   return await sendEmail({
@@ -165,6 +165,7 @@ export const requestResetToken = async (email) => {
   | reset password
   |============================
 */
+
 export const resetPassword = async (payload) => {
   let entries;
 

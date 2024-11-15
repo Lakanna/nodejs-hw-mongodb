@@ -18,6 +18,14 @@ export default [
         },
       ],
       'no-undef': 'error',
+      'no-multiple-empty-lines': [
+        'error',
+        {
+          max: 2,
+          maxEOF: 1,
+          maxBOF: 1,
+        },
+      ],
     },
   },
 ];
