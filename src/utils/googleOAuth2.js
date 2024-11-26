@@ -3,6 +3,7 @@ import path from 'node:path';
 import { readFile } from 'fs/promises';
 
 import { env } from './env.js';
+import createHttpError from 'http-errors';
 
 const PATH_JSON = path.resolve('google-oauth.json');
 
@@ -23,4 +24,29 @@ export const generateAuthUrl = () => {
       'https://www.googleapis.com/auth/userinfo.profile',
     ],
   });
+};
+
+export const validateCode = async (code) => {
+  const respons = await googleOAuthClient.getToken(code);
+
+  console.log(respons, 'respons in google utils');
+
+  if (!respons.tokens.id_token) throw createHttpError(401, 'Unauthorized');
+
+  const ticket = await googleOAuthClient.verifyIdToken({
+    idToken: respons.tokens.id_token,
+  });
+  console.log(ticket, 'ticket');
+  return ticket;
+};
+
+export const getFullNameFromGoogleTokenPayload = (payload) => {
+  let fullName = 'Guest';
+
+  if (payload.given_name && payload.family_name) {
+    fullName = `${payload.given_name} ${payload.family_name}`;
+  } else if (payload.given_name) {
+    fullName = payload.given_name;
+  }
+  return fullName;
 };
