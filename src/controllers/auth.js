@@ -1,6 +1,7 @@
 import createHttpError from 'http-errors';
 import { ONE_MOUNTH } from '../constants/index.js';
 import {
+  loginOrSignupWithGoogle,
   loginUser,
   logoutUser,
   refreshUserSession,
@@ -155,5 +156,23 @@ export const getGoogleOAuthUrlController = async (req, res) => {
     status: 200,
     message: 'Successfully get Google OAuth url!',
     data: { url },
+  });
+};
+
+/**
+  |============================
+  | login with google controller
+  |============================
+*/
+
+export const loginWithGoogleController = async (req, res) => {
+  const session = await loginOrSignupWithGoogle(req.body.code);
+
+  setupSession(res, session);
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully logged in via Google OAuth!',
+    data: { accessToken: session.accessToken },
   });
 };
