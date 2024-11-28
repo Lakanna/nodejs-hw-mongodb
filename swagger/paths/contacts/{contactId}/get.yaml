@@ -1,5 +1,5 @@
 tags:
-  - Contactss
+  - Contacts
 summary: Get contact by id
 operationId: getContact
 description: 'Get contact by id'
@@ -7,7 +7,7 @@ security:
   - bearerAuth: []
 parameters:
   - in: path
-    name: id
+    name: contactId
     required: true
     schema:
       type: string
