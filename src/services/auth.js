@@ -29,6 +29,7 @@ import {
 */
 export const registerUser = async (payload) => {
   const registredUser = await UsersCollection.findOne({ email: payload.email });
+
   if (registredUser) throw createHttpError(409, 'Email in use');
 
   const encryptedPassword = await bcrypt.hash(payload.password, 10);

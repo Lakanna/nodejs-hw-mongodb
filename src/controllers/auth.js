@@ -35,16 +35,6 @@ export const registerController = async (req, res) => {
 export const loginUserController = async (req, res) => {
   const session = await loginUser(req.body);
 
-  // res.cookie('refreshToken', session.refreshToken, {
-  //   httpOnly: true,
-  //   expires: new Date(Date.now() + ONE_MOUNTH),
-  // });
-
-  // res.cookie('sessionId', session._id, {
-  //   httpOnly: true,
-  //   expires: new Date(Date.now() + ONE_MOUNTH),
-  // });
-
   setupSession(res, session);
 
   res.status(200).json({
@@ -54,7 +44,16 @@ export const loginUserController = async (req, res) => {
   });
 };
 
+/**
+  |============================
+  | logout user controller
+  |============================
+*/
+
 export const logoutUserController = async (req, res) => {
+  if (!req.cookies.sessionId) {
+    throw createHttpError(401, 'Unauthorized');
+  }
   if (req.cookies.sessionId) {
     await logoutUser(req.cookies.sessionId);
   }

@@ -1,0 +1,20 @@
+tags:
+  - Auth
+summary: Logout user
+operationId: logoutUser
+description: 'Logs out the user'
+security: []
+parameters:
+  - name: sessionId
+    in: cookie
+    required: true
+    schema:
+      type: string
+    description: The session ID stored in the cookie used to identify the user's session.
+responses:
+  '204':
+    description: Logout a user
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '500':
+    $ref: '../../../components/responses/500.yaml'
