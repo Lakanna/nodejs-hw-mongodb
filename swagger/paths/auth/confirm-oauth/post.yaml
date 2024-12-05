@@ -1,0 +1,48 @@
+tags:
+  - Auth
+summary: Register or login user with Google
+operationId: registerUserWithGoogle
+description: 'Register or login a user with Google'
+security: []
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - code
+        properties:
+          code:
+            description: 'Code from url, that sent to user for login with Google'
+            type: string
+            example: '4/0AeanS0bQiv-mOEsjZP0msY_zUUCQDV51TLjOyEP1g_myVdlzLZqEDNtxGFZX0vRlIQIaCA'
+responses:
+  '200':
+    description: Logged a user with Google
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully logged in via Google OAuth!
+            data:
+              type: object
+              required:
+                - accessToken
+              properties:
+                accessToken:
+                  type: string
+                  example: 'YthV5uRTWX61T+U0AHP/F9QyPdeg7xtJMt1QySxb'
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '500':
+    $ref: '../../../components/responses/500.yaml'
